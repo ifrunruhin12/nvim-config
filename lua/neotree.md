@@ -82,3 +82,5 @@ Neo-tree shows Git status indicators for files:
 1. Open Neo-tree with `<leader>e`
 2. Navigate with `j`/`k` or arrow keys
 3. Press `?` to see all available commands
+
+*Note: This file has been moved to `lua/neotree.md`*

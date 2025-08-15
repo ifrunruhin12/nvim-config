@@ -1,13 +1,13 @@
 # 🚀 My Sexy Neovim Setup
 
-> **Status:** 🚧 Work in Progress - Soon to be complete and boost my productivity!
+> **Status:** 🚧 Work in Progress - Now with better organization!
 
 A minimal, modern Neovim configuration built for speed and efficiency. This is the beginning of something beautiful.
 
 ## ✨ Current Features
 
 - **🌙 Tokyo Night** - Beautiful dark theme that's easy on the eyes
-- **🌳 Neo-tree** - Powerful file explorer with Git integration
+- **🌳 Neo-tree** - Powerful file explorer with Git integration (see `lua/neotree.md` for full documentation)
 - **🔍 Telescope** - Lightning-fast fuzzy finder for files and content
 - **🌲 Treesitter** - Superior syntax highlighting and code understanding
 - **⚡ Lazy.nvim** - Modern plugin manager for blazing fast startup
@@ -28,6 +28,17 @@ A minimal, modern Neovim configuration built for speed and efficiency. This is t
 1. Backup your existing Neovim config (if any)
 2. Clone this repo to your Neovim config directory
 3. Launch Neovim and let the magic happen!
+
+## 🏗️ Project Structure
+
+```
+~/.config/nvim/
+├── init.lua           # Main configuration file
+├── lua/
+│   ├── plugins.lua    # All plugin configurations
+│   └── neotree.md     # Neo-tree documentation
+└── README.md          # This file
+```
 
 ## 🎮 Key Bindings
 
@@ -52,7 +63,13 @@ A minimal, modern Neovim configuration built for speed and efficiency. This is t
 | `<Space>o` | Focus file explorer |
 | `?` | Show all key mappings |
 
-*For full Neo-tree documentation, see [neotree.md](neotree.md)*
+*For full Neo-tree documentation, see [lua/neotree.md](lua/neotree.md)*
+
+## 🔧 Configuration
+
+- **Plugin Configs**: All plugin configurations are in `lua/plugins.lua`
+- **Custom Settings**: Core settings are in `init.lua`
+- **Documentation**: Plugin-specific docs are in the `lua/` directory
 
 ## 🔮 Coming Soon
 
