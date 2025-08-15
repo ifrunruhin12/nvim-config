@@ -9,5 +9,6 @@ return {
     require('plugins.plenary'),
     require('plugins.telescope'),
     require('plugins.treesitter'),
+    require('plugins.lualine'),
     -- Will add more plugins require here if necesary
 }
