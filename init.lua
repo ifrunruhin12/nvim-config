@@ -10,13 +10,8 @@ vim.g.mapleader = ' '
 -- ===========================
 -- Basic options
 -- ===========================
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-vim.opt.wrap = false
-vim.opt.cursorline = true
+require("vim-options")
+
 
 -- ===========================
 -- Bootstrap lazy.nvim
