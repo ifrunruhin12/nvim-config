@@ -87,29 +87,27 @@ require("lazy").setup({
 
     -- Treesitter for better syntax highlighting
     {
-        "nvim-treesitter/nvim-treesitter",
-        -- build = ":TSUpdate", -- Automatically updates parsers
-        config = function()
-            require("nvim-treesitter.configs").setup({
-
-                -- parser_install_dir = vim.fn.stdpath("data") .. "/lazy/nvim-treesitter/parser",
-                -- Languages you want to install
-                ensure_installed = { "lua", "vim", "vimdoc", "markdown", "query", "c", "python", "go", "bash", "html", "css", "javascript", "json" },
-                
-                -- Install languages synchronously (only if you prefer)
-                sync_install = false,
-                auto_install = false,
-
-                -- Enable highlighting
-                highlight = {
-                    enable = true,
-                    additional_vim_regex_highlighting = false,
-                },
-
-                -- Enable indentation
-                indent = { enable = true },
-            })
-        end
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+        require("nvim-treesitter.configs").setup({
+            ensure_installed = { 
+                "lua", "vim", "vimdoc", "markdown", "query", 
+                "c", "python", "go", "bash", "html", "css", 
+                "javascript", "json" 
+            },
+            
+            sync_install = false,
+            auto_install = false,
+            
+            highlight = {
+                enable = true,
+                additional_vim_regex_highlighting = false,
+            },
+            
+            indent = { enable = true },
+        })
+    end
     }
 })
 
