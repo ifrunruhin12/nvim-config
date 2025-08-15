@@ -68,4 +68,4 @@ A minimal, modern Neovim configuration built for speed and efficiency. This is t
 
 ---
 
-**Note:** This is a living configuration that's constantly evolving. Stay tuned for updates! ⚡
+**Note:** This is a living configuration that's constantly evolving. Stay tuned for updates!! ⚡
