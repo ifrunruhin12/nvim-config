@@ -10,5 +10,6 @@ return {
     require('plugins.telescope'),
     require('plugins.treesitter'),
     require('plugins.lualine'),
+    require('plugins.lsp-config'),
     -- Will add more plugins require here if necesary
 }
