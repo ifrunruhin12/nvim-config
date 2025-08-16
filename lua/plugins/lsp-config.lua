@@ -1,4 +1,5 @@
 -- Simple LSP Configuration for Go, Python, and Lua
+
 return {
   -- Mason - LSP server manager
   {
@@ -43,9 +44,8 @@ return {
       local lspconfig = require("lspconfig")
 
       -- Common on_attach function
-      local on_attach = function(client, bufnr)
+      local on_attach = function(_, bufnr)  -- Using _ for unused client parameter
         local opts = { buffer = bufnr, silent = true }
-        
         -- Key mappings
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -56,8 +56,7 @@ return {
         vim.keymap.set("n", "<leader>f", function()
           vim.lsp.buf.format({ async = true })
         end, opts)
-        
-        -- Diagnostics
+        -- Diagnostics (using updated API)
         vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
         vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, opts)
       end
@@ -73,19 +72,37 @@ return {
         update_in_insert = false,
       })
 
-      -- Lua LSP
+      -- Lua LSP (Enhanced configuration to fix vim global warnings)
       lspconfig.lua_ls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
         settings = {
           Lua = {
-            runtime = { version = "LuaJIT" },
-            diagnostics = { globals = { "vim" } },
+            runtime = {
+              version = "LuaJIT",
+              path = vim.split(package.path, ';')
+            },
+            diagnostics = {
+              globals = { "vim", "use", "describe", "it", "assert" },  -- Add common globals
+              disable = { "missing-fields", "incomplete-signature-doc" }
+            },
             workspace = {
-              library = vim.api.nvim_get_runtime_file("", true),
+              library = {
+                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+                [vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy"] = true,
+              },
+              maxPreload = 100000,
+              preloadFileSize = 10000,
               checkThirdParty = false,
             },
             telemetry = { enable = false },
+            completion = {
+              callSnippet = "Replace"
+            },
+            format = {
+              enable = false -- Disable lua_ls formatting if you use other formatters
+            }
           },
         },
       })

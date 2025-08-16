@@ -1,3 +1,4 @@
+vim.g.lua_ls_disable_warnings = false
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4
