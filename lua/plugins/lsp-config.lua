@@ -57,7 +57,9 @@ return {
           vim.lsp.buf.format({ async = true })
         end, opts)
         -- Diagnostics (using updated API)
+---@diagnostic disable-next-line: deprecated
         vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
+---@diagnostic disable-next-line: deprecated
         vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, opts)
       end
 
