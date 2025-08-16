@@ -1,296 +1,239 @@
--- Enhanced LSP Configuration with nvim-cmp integration
+-- FINAL CLEAN LSP Configuration - Eliminates all duplicates and conflicts
 
 return {
-    -- Mason - LSP server manager
-    {
-        "williamboman/mason.nvim",
-        config = function()
-            require("mason").setup({
-                ui = {
-                    icons = {
-                        package_installed = "✓",
-                        package_pending = "➜",
-                        package_uninstalled = "✗",
-                    },
-                },
-            })
-        end,
-    },
+	-- Mason - LSP server manager
+	{
+		"williamboman/mason.nvim",
+		config = function()
+			require("mason").setup({
+				ui = {
+					icons = {
+						package_installed = "✓",
+						package_pending = "➜",
+						package_uninstalled = "✗",
+					},
+				},
+			})
+		end,
+	},
 
-    -- Mason LSP Config
-    {
-        "williamboman/mason-lspconfig.nvim",
-        dependencies = { "williamboman/mason.nvim" },
-        config = function()
-            require("mason-lspconfig").setup({
-                ensure_installed = {
-                    "lua_ls", -- Lua
-                    "gopls", -- Go
-                    "pyright", -- Python
-                },
-                automatic_installation = true,
-            })
-        end,
-    },
+	-- Mason LSP Config - MINIMAL setup to prevent conflicts
+	{
+		"williamboman/mason-lspconfig.nvim",
+		dependencies = { "williamboman/mason.nvim" },
+		config = function()
+			require("mason-lspconfig").setup({
+				ensure_installed = { "lua_ls", "gopls", "pyright" },
+				automatic_installation = true,
+				-- CRITICAL: Completely prevent mason from setting up ANY servers
+				handlers = {
+					function() end, -- Default handler does nothing
+				},
+			})
+		end,
+	},
 
-    -- LSP Config
-    {
-        "neovim/nvim-lspconfig",
-        dependencies = {
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
-            "hrsh7th/cmp-nvim-lsp", -- LSP completion source
-        },
-        config = function()
-            local lspconfig = require("lspconfig")
+	-- LSP Config - Clean manual setup
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
+			"hrsh7th/cmp-nvim-lsp",
+		},
+		config = function()
+			local lspconfig = require("lspconfig")
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-            -- Enhanced capabilities with nvim-cmp
-            local capabilities =
-                require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+			-- Set diagnostic config ONCE globally
+			vim.diagnostic.config({
+				virtual_text = {
+					prefix = "●",
+					source = "if_many",
+					spacing = 2,
+				},
+				signs = {
+					text = {
+						[vim.diagnostic.severity.ERROR] = " ",
+						[vim.diagnostic.severity.WARN] = " ",
+						[vim.diagnostic.severity.HINT] = "󰌶 ",
+						[vim.diagnostic.severity.INFO] = " ",
+					},
+				},
+				underline = true,
+				update_in_insert = false,
+				severity_sort = true,
+				float = {
+					focusable = false,
+					style = "minimal",
+					border = "rounded",
+					source = "always",
+					header = "",
+					prefix = "",
+				},
+			})
 
-            -- Enable snippet support
-            capabilities.textDocument.completion.completionItem.snippetSupport = true
-            capabilities.textDocument.completion.completionItem.resolveSupport = {
-                properties = {
-                    "documentation",
-                    "detail",
-                    "additionalTextEdits",
-                },
-            }
+			-- Clean on_attach function
+			local on_attach = function(client, bufnr)
+				-- FORCE disable formatting for all LSP clients except null-ls
+				if client.name ~= "null-ls" then
+					client.server_capabilities.documentFormattingProvider = false
+					client.server_capabilities.documentRangeFormattingProvider = false
+				end
 
-            -- Common on_attach function
-            local on_attach = function(client, bufnr)
-                local opts = { buffer = bufnr, silent = true }
+				local opts = { buffer = bufnr, silent = true, noremap = true }
 
-                -- LSP keymaps
-                vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-                vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-                vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-                vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-                vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-                vim.keymap.set("n", "<leader>f", function()
-                    vim.lsp.buf.format({ async = true })
-                end, opts)
+				-- Essential keymaps
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+				vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+				vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
+				vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, opts)
+				vim.keymap.set("n", "<leader>dl", vim.diagnostic.open_float, opts)
+				vim.keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, opts)
+				vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+			end
 
-                -- Enhanced diagnostics navigation
-                vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
-                vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, opts)
-                vim.keymap.set("n", "<leader>dl", vim.diagnostic.open_float, opts)
-                vim.keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, opts)
+			-- Prevent multiple setups with a simpler approach
+			local servers_started = {}
 
-                -- Show signature help
-                vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+			local function start_server(name, config)
+				if servers_started[name] then
+					return
+				end
 
-                -- Workspace management
-                vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-                vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-                vim.keymap.set("n", "<leader>wl", function()
-                    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                end, opts)
+				-- Kill any existing instances first
+				local existing = vim.lsp.get_clients({ name = name })
+				for _, client in pairs(existing) do
+					client.stop()
+				end
 
-                -- Enable inlay hints if supported (for newer LSP servers)
-                if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-                    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-                end
+				-- Wait a moment for cleanup
+				vim.defer_fn(function()
+					lspconfig[name].setup(config)
+					servers_started[name] = true
+				end, 100)
+			end
 
-                -- Highlight references under cursor
-                if client.server_capabilities.documentHighlightProvider then
-                    vim.api.nvim_create_augroup("lsp_document_highlight", {
-                        clear = false,
-                    })
-                    vim.api.nvim_clear_autocmds({
-                        buffer = bufnr,
-                        group = "lsp_document_highlight",
-                    })
-                    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-                        group = "lsp_document_highlight",
-                        buffer = bufnr,
-                        callback = vim.lsp.buf.document_highlight,
-                    })
-                    vim.api.nvim_create_autocmd({ "CursorMoved" }, {
-                        group = "lsp_document_highlight",
-                        buffer = bufnr,
-                        callback = vim.lsp.buf.clear_references,
-                    })
-                end
-            end
+			-- Clean Lua LSP setup
+			start_server("lua_ls", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				settings = {
+					Lua = {
+						runtime = { version = "LuaJIT" },
+						diagnostics = {
+							globals = { "vim", "use", "describe", "it", "assert", "before_each", "after_each" },
+							disable = {
+								"missing-fields",
+								"incomplete-signature-doc",
+								"inject-field",
+								"undefined-field",
+							},
+						},
+						workspace = {
+							library = {
+								[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+								[vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+							},
+							checkThirdParty = false,
+						},
+						telemetry = { enable = false },
+						completion = { callSnippet = "Replace" },
+						format = { enable = false },
+					},
+				},
+			})
 
-            -- Diagnostic signs (using modern vim.diagnostic API)
-            vim.diagnostic.config({
-                virtual_text = {
-                    prefix = "●", -- Nice bullet point
-                    source = "if_many", -- Show source if multiple LSPs attached
-                    spacing = 2,
-                },
-                signs = {
-                    text = {
-                        [vim.diagnostic.severity.ERROR] = " ",
-                        [vim.diagnostic.severity.WARN] = " ",
-                        [vim.diagnostic.severity.HINT] = "󰌶 ",
-                        [vim.diagnostic.severity.INFO] = " ",
-                    },
-                },
-                underline = true,
-                update_in_insert = false,
-                severity_sort = true,
-                -- Reduce duplicate diagnostics
-                float = {
-                    focusable = false,
-                    style = "minimal",
-                    border = "rounded",
-                    source = "always",
-                    header = "",
-                    prefix = "",
-                },
-            })
+			-- ULTRA CLEAN Go LSP setup - removed ALL formatting config to prevent conflicts
+			start_server("gopls", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				settings = {
+					gopls = {
+						-- MINIMAL settings to prevent conflicts
+						completeUnimported = true,
+						usePlaceholders = true,
+						analyses = {
+							unusedparams = true,
+							shadow = true,
+						},
+						staticcheck = true,
+						codelenses = {
+							generate = true,
+							test = true,
+							tidy = true,
+						},
+						-- REMOVED all formatting-related settings to prevent "duplicate value" errors
+					},
+				},
+				-- Force disable formatting capabilities
+				on_init = function(client, _)
+					client.server_capabilities.documentFormattingProvider = false
+					client.server_capabilities.documentRangeFormattingProvider = false
+				end,
+			})
 
-            -- Lua LSP (Enhanced configuration)
-            lspconfig.lua_ls.setup({
-                on_attach = on_attach,
-                capabilities = capabilities,
-                settings = {
-                    Lua = {
-                        runtime = {
-                            version = "LuaJIT",
-                            path = vim.split(package.path, ";"),
-                        },
-                        diagnostics = {
-                            globals = { "vim", "use", "describe", "it", "assert", "before_each", "after_each" },
-                            disable = {
-                                "missing-fields",
-                                "incomplete-signature-doc",
-                                "inject-field",
-                                "undefined-field",
-                            },
-                        },
-                        workspace = {
-                            library = {
-                                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                                [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-                                [vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy"] = true,
-                            },
-                            maxPreload = 100000,
-                            preloadFileSize = 10000,
-                            checkThirdParty = false,
-                        },
-                        telemetry = { enable = false },
-                        completion = {
-                            callSnippet = "Replace",
-                            keywordSnippet = "Replace",
-                            displayContext = 5,
-                        },
-                        format = {
-                            enable = false, -- Use stylua via none-ls instead
-                        },
-                        hint = {
-                            enable = true, -- Enable inlay hints
-                            arrayIndex = "Disable",
-                            await = true,
-                            paramName = "Disable",
-                            paramType = true,
-                            semicolon = "Disable",
-                            setType = false,
-                        },
-                    },
-                },
-            })
+			-- Clean Python LSP setup
+			start_server("pyright", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				settings = {
+					python = {
+						analysis = {
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+							diagnosticMode = "workspace",
+							typeCheckingMode = "basic",
+						},
+					},
+				},
+			})
 
-            -- Go LSP (Enhanced configuration)
-            lspconfig.gopls.setup({
-                on_attach = on_attach,
-                capabilities = capabilities,
-                settings = {
-                    gopls = {
-                        completeUnimported = true,
-                        usePlaceholders = true,
-                        analyses = {
-                            unusedparams = true,
-                            shadow = true,
-                            nilness = true,
-                            unusedwrite = true,
-                        },
-                        staticcheck = true,
-                        gofumpt = true, -- Use gofumpt for stricter formatting
-                        codelenses = {
-                            gc_details = false,
-                            generate = true,
-                            regenerate_cgo = true,
-                            run_govulncheck = true,
-                            test = true,
-                            tidy = true,
-                            upgrade_dependency = true,
-                            vendor = true,
-                        },
-                        hints = {
-                            assignVariableTypes = false,
-                            compositeLiteralFields = false,
-                            compositeLiteralTypes = false,
-                            constantValues = true,
-                            functionTypeParameters = false,
-                            parameterNames = false,
-                            rangeVariableTypes = false,
-                        },
-                    },
-                },
-                init_options = {
-                    usePlaceholders = true,
-                },
-            })
+			-- Monitor and clean up any duplicate instances
+			vim.api.nvim_create_autocmd("LspAttach", {
+				callback = function(args)
+					local client = vim.lsp.get_client_by_id(args.data.client_id)
+					if not client then
+						return
+					end
 
-            -- Python LSP (Enhanced configuration)
-            lspconfig.pyright.setup({
-                on_attach = on_attach,
-                capabilities = capabilities,
-                settings = {
-                    python = {
-                        analysis = {
-                            autoSearchPaths = true,
-                            useLibraryCodeForTypes = true,
-                            diagnosticMode = "workspace",
-                            typeCheckingMode = "basic", -- Can be "off", "basic", or "strict"
-                            autoImportCompletions = true,
-                            indexing = true,
-                        },
-                    },
-                },
-            })
+					-- Check for duplicates and kill extras
+					vim.defer_fn(function()
+						local same_clients = vim.lsp.get_clients({ name = client.name })
+						if #same_clients > 1 then
+							-- Keep the newest one, kill older ones
+							table.sort(same_clients, function(a, b)
+								return a.id > b.id
+							end)
+							for i = 2, #same_clients do
+								same_clients[i].stop()
+							end
+						end
+					end, 500)
+				end,
+			})
 
-            -- Show LSP status in statusline (if not using lualine)
-            vim.api.nvim_create_autocmd("LspAttach", {
-                callback = function(args)
-                    local client = vim.lsp.get_client_by_id(args.data.client_id)
-                    if client then
-                        vim.notify("LSP " .. client.name .. " attached to buffer", vim.log.levels.INFO)
-                    end
-                end,
-            })
+			-- Improved cleanup command
+			vim.api.nvim_create_user_command("FixLSP", function()
+				-- Stop all LSP clients
+				for _, client in pairs(vim.lsp.get_clients()) do
+					client.stop()
+				end
 
-            -- Automatically show signature help in insert mode
-            vim.api.nvim_create_autocmd("CursorHoldI", {
-                pattern = "*",
-                callback = function()
-                    local clients = vim.lsp.get_active_clients()
-                    if #clients > 0 then
-                        for _, client in pairs(clients) do
-                            if client.server_capabilities.signatureHelpProvider then
-                                vim.lsp.buf.signature_help()
-                                break
-                            end
-                        end
-                    end
-                end,
-                desc = "Show signature help in insert mode",
-            })
+				-- Reset tracking
+				servers_started = {}
 
-            -- Format on save for specific filetypes
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                pattern = { "*.go", "*.lua" },
-                callback = function()
-                    vim.lsp.buf.format({ async = false })
-                end,
-                desc = "Format Go and Lua files on save",
-            })
-        end,
-    },
+				-- Restart after a moment
+				vim.defer_fn(function()
+					vim.cmd("edit") -- Reload current buffer to restart LSP
+				end, 1000)
+
+				vim.notify("LSP clients restarted", vim.log.levels.INFO)
+			end, {})
+		end,
+	},
 }
