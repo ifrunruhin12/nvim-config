@@ -1,163 +1,106 @@
 # 🚀 My Sexy Neovim Setup
 
-> **Status:** 🚧 Work in Progress - Clean, modular, and fast!
+> **Status:** ✨ Production Ready - Clean, modular, and blazing fast!
 
-A minimal, modern Neovim configuration built for speed and efficiency with a modular plugin architecture.
+A comprehensive, modern Neovim configuration built for speed, efficiency, and developer productivity with full LSP support, intelligent autocompletion, and a beautiful interface.
 
-## ✨ Current Features
+## ✨ Features
 
-- **🌙 Tokyo Night** - Beautiful dark theme that's easy on the eyes
+- **🌙 Tokyo Night** - Beautiful dark theme
 - **🌳 Neo-tree** - Powerful file explorer with Git integration
-- **🔍 Telescope** - Lightning-fast fuzzy finder for files and content
-- **🌲 Treesitter** - Superior syntax highlighting and code understanding
-- **📊 Lualine** - Beautiful and informative status line
-- **⚡ Lazy.nvim** - Modern plugin manager for blazing fast startup
-- **📁 Modular Structure** - Each plugin in its own configuration file
-
-## 🎯 What's Included
-
-```lua
--- Essential plugins currently configured:
-🎨 folke/tokyonight.nvim       -- Tokyo Night colorscheme
-🌳 nvim-neo-tree/neo-tree.nvim -- File explorer with Git integration  
-🔭 nvim-telescope/telescope.nvim -- Fuzzy finder
-🌲 nvim-treesitter/nvim-treesitter -- Syntax highlighting
-📊 nvim-lualine/lualine.nvim   -- Status line
-🎭 nvim-tree/nvim-web-devicons -- File type icons
-📦 folke/lazy.nvim             -- Plugin manager
-🔧 MunifTanjim/nui.nvim        -- UI components
-🛠️  nvim-lua/plenary.nvim      -- Utility functions
-```
+- **🔍 Telescope** - Lightning-fast fuzzy finder
+- **🌲 Treesitter** - Superior syntax highlighting
+- **📊 Lualine** - Beautiful status line
+- **🧠 LSP Support** - Full Language Server Protocol (Lua, Go, Python)
+- **💡 Autocompletion** - Intelligent code completion with snippets
+- **🎯 Auto-formatting** - Code formatting on save
+- **🏠 Alpha Dashboard** - Beautiful startup screen
+- **🤖 Auto-pairs** - Smart bracket completion
+- **⚡ Lazy.nvim** - Fast plugin management
+- **📁 Modular Structure** - Each plugin in its own file
 
 ## 🚀 Quick Start
 
-1. Backup your existing Neovim config (if any)
-2. Clone this repo to your Neovim config directory:
+1. **Backup existing config**:
+
+   ```bash
+   mv ~/.config/nvim ~/.config/nvim.backup
+   ```
+
+2. **Clone this repository**:
+
    ```bash
    git clone <your-repo> ~/.config/nvim
    ```
-3. Launch Neovim and let Lazy.nvim install all plugins automatically!
-4. Restart Neovim to ensure everything loads properly
+
+3. **Launch Neovim** and let plugins install automatically:
+
+   ```bash
+   nvim
+   ```
+
+4. **Restart Neovim** to ensure everything loads properly
+
+## 🎮 Essential Key Bindings
+
+| Category    | Key         | Action               |
+| ----------- | ----------- | -------------------- |
+| **General** | `<Space>w`  | Save file            |
+|             | `<Space>q`  | Quit                 |
+| **Files**   | `<Space>e`  | Toggle file explorer |
+|             | `<Space>ff` | Find files           |
+|             | `<Space>fg` | Search in files      |
+| **LSP**     | `gd`        | Go to definition     |
+|             | `K`         | Show documentation   |
+|             | `<Space>f`  | Format code          |
+|             | `<Space>ca` | Code actions         |
+
+_For complete keybinding reference, see individual plugin guides below._
+
+## 📚 Documentation
+
+### Plugin Guides
+
+- [🧠 LSP Configuration](lua/docs/lsconfig.md) - Language servers, keybindings, troubleshooting
+- [🌳 Neo-tree Guide](lua/docs/neotree.md) - File explorer usage and shortcuts
+- [💡 Autocompletion Guide](lua/docs/autocompletion.md) - nvim-cmp, snippets, and completion
+- [🌲 Treesitter Guide](lua/docs/treesitter.md) - Syntax highlighting and parsing
+- [🔍 Telescope Guide](lua/docs/telescope.md) - Fuzzy finding and searching
+- [🎯 Formatting Guide](lua/docs/formatting.md) - Auto-formatting with none-ls
+
+### Configuration Guides
+
+- [⚙️ Customization Guide](lua/docs/customization.md) - Adding plugins, servers, and keymaps
+- [🛠️ Troubleshooting Guide](lua/docs/troubleshooting.md) - Common issues and solutions
 
 ## 🏗️ Project Structure
 
 ```
 ~/.config/nvim/
-├── init.lua                   # Main entry point
-├── lazy-lock.json            # Plugin version lock file
+├── assets                 # Screenshots
+├── init.lua               # Main entry point
 ├── lua/
-│   ├── vim-options.lua       # Core Vim settings
-│   ├── plugins.lua           # Plugin loader (redirects to plugins/init.lua)
-│   ├── neotree.md           # Neo-tree documentation
-│   └── plugins/             # Modular plugin configurations
-│       ├── init.lua         # Plugin list and loader
-│       ├── colorscheme.lua  # Tokyo Night theme
-│       ├── devicons.lua     # File icons
-│       ├── lualine.lua      # Status line
-│       ├── neo-tree.lua     # File explorer
-│       ├── nui.lua          # UI components
-│       ├── plenary.lua      # Utility library
-│       ├── telescope.lua    # Fuzzy finder
-│       └── treesitter.lua   # Syntax highlighting
-└── README.md                # This file
+│   ├── vim-options.lua    # Core Vim settings
+│   ├── docs/              # Documentation guides
+│   ├── snippets/          # Custom code snippets
+│   └── plugins/           # Modular plugin configurations
+└── README.md              # This file
 ```
 
-## ⚙️ Core Settings
+## 🚀 Performance
 
-Your Neovim is configured with these sensible defaults:
-- **Line numbers**: Both absolute and relative
-- **Indentation**: 4 spaces, no tabs
-- **UI**: No line wrapping, cursor line highlighting
-- **Leader key**: `<Space>`
+- **Fast startup**: Lazy loading and optimized plugin order
+- **Smart caching**: Efficient completion and search
+- **Minimal overhead**: Only essential features loaded
 
-## 🎮 Key Bindings
+## Screenshots
 
-### 🖥️ General
-| Key | Action |
-|-----|--------|
-| `<Space>w` | Save file |
-| `<Space>q` | Quit |
-
-### 🔍 Telescope
-| Key | Action |
-|-----|--------|
-| `<Space>ff` | Find files |
-| `<Space>fg` | Live grep (search in files) |
-| `<Space>fb` | Find buffers |
-| `<Space>fh` | Help tags |
-
-### 🌳 Neo-tree
-| Key | Action |
-|-----|--------|
-| `<Space>e` | Toggle file explorer |
-| `<Space>o` | Focus file explorer |
-| `<Space>gs` | Git status (floating window) |
-| `?` | Show all key mappings (when in Neo-tree) |
-
-*For complete Neo-tree documentation, see [lua/neotree.md](lua/neotree.md)*
-
-## 🎨 Theme & UI
-
-- **Colorscheme**: Tokyo Night (night variant)
-- **Status line**: Lualine with Tokyo Night theme
-- **Icons**: Web devicons for file types
-- **File explorer**: Neo-tree with Git integration
-- **Fuzzy finder**: Telescope with custom prompt
-
-## 🔧 Plugin Management
-
-This configuration uses **Lazy.nvim** for plugin management:
-- Fast startup times with lazy loading
-- Automatic plugin installation on first run
-- Version locking with `lazy-lock.json`
-- Modular configuration structure
-
-Each plugin has its own configuration file in `lua/plugins/`, making it easy to:
-- Add new plugins
-- Modify existing configurations
-- Remove plugins cleanly
-- Understand what each plugin does
-
-## 🌟 Language Support
-
-Treesitter is configured with parsers for:
-- **Lua** - For Neovim configuration
-- **Vim** - Vim script support
-- **Markdown** - Documentation
-- **Web**: HTML, CSS, JavaScript, JSON
-- **Systems**: C, Python, Go, Bash
-- And more!
-
-## 🔮 Coming Soon
-
-- **LSP Configuration** - Intelligent code completion and diagnostics
-- **Formatting & Linting** - Code quality tools
-- **Git Integration** - Enhanced Git workflow
-- **Custom Snippets** - Code templates
-- **More Language Support** - Extended Treesitter parsers
-- **Debugging Support** - DAP integration
-
-## 📸 Screenshots
-
-*Screenshots coming once the configuration reaches v1.0!*
-
-## 🤝 Contributing
-
-This is a personal configuration, but feel free to:
-- Fork and adapt to your needs
-- Suggest improvements
-- Report issues
-- Share your own modifications
-
-## 📝 Notes
-
-- Configuration is organized modularly for easy maintenance
-- All plugins are locked to specific versions for stability
-- Neo-tree replaces the default file explorer (netrw)
-- Status line shows mode, git branch, file info, and more
+![Screenshots 1](assets/ss1.png)
+![Screenshots 2](assets/ss2.png)
+![Screenshots 3](assets/ss3.png)
 
 ---
 
-**Note:** This configuration evolves constantly. Check the commit history to see what's new! ⚡
+**📖 For detailed usage instructions, troubleshooting, and customization options, please refer to the individual guides in the [lua/docs/](lua/docs/) folder.**
 
-*Built with ❤️ for productive coding*
+_Built with ❤️ for productive coding_ ⚡
