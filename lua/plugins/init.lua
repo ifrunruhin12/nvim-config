@@ -11,5 +11,6 @@ return {
     require('plugins.treesitter'),
     require('plugins.lualine'),
     require('plugins.lsp-config'),
+    require('plugins.none-ls'),
     -- Will add more plugins require here if necesary
 }

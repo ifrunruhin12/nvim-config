@@ -11,7 +11,8 @@
     "it",
     "assert",
     "before_each",
-    "after_each"
+    "after_each",
+        "augroup"
   ],
   "Lua.diagnostics.disable": [
     "missing-fields",
