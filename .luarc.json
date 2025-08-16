@@ -16,7 +16,9 @@
   ],
   "Lua.diagnostics.disable": [
     "missing-fields",
-    "incomplete-signature-doc"
+    "incomplete-signature-doc",
+        "inject-field",
+        "undefined-field"
   ],
   "Lua.workspace.library": [
     "${3rd}/luv/library",
