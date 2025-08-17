@@ -15,9 +15,10 @@ return {
 	require("plugins.alpha"),
 	require("plugins.nvim-cmp"),
 	require("plugins.autopairs"),
-	require("plugins.ai-codeium"),
+	-- require("plugins.ai-codeium"),
 	require("plugins.ai-chatgpt"),
 	require("plugins.ai-gen"),
 	require("plugins.ai-trouble"),
+	require("plugins.ai-copilot"),
 	-- Will add more plugins require here if necessary
 }
