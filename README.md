@@ -18,6 +18,8 @@ A comprehensive, modern Neovim configuration built for speed, efficiency, and de
 - **🤖 Auto-pairs** - Smart bracket completion
 - **⚡ Lazy.nvim** - Fast plugin management
 - **📁 Modular Structure** - Each plugin in its own file
+- **🪲 Debugger** - nvim-dap + UI + virtual text + Telescope integration (Go-ready via Delve)
+- **🧩 AI Tools** - GitHub Copilot suggestions, ChatGPT actions, Gen.nvim (local AI via Ollama)
 
 ## 🚀 Quick Start
 
@@ -54,6 +56,19 @@ A comprehensive, modern Neovim configuration built for speed, efficiency, and de
 |             | `K`         | Show documentation   |
 |             | `<Space>f`  | Format code          |
 |             | `<Space>ca` | Code actions         |
+| **AI**      | `<Space>ai` | Enable Copilot       |
+|             | `<Space>dai`| Disable Copilot      |
+|             | `<Space>tai`| Toggle Copilot       |
+|             | `Ctrl+G`    | Accept suggestion    |
+| **Debug**   | `<F5>`      | Continue/Start       |
+|             | `<F10>`     | Step over            |
+|             | `<F11>`     | Step into            |
+|             | `<F12>`     | Step out             |
+|             | `<Space>db` | Toggle breakpoint    |
+|             | `<Space>dr` | Open DAP REPL        |
+|             | `<Space>dl` | Run last             |
+|             | `<Space>dt` | Terminate            |
+|             | `<Space>du` | Toggle DAP UI        |
 
 _For complete keybinding reference, see individual plugin guides below._
 
@@ -67,6 +82,8 @@ _For complete keybinding reference, see individual plugin guides below._
 - [🌲 Treesitter Guide](lua/docs/treesitter.md) - Syntax highlighting and parsing
 - [🔍 Telescope Guide](lua/docs/telescope.md) - Fuzzy finding and searching
 - [🎯 Formatting Guide](lua/docs/formatting.md) - Auto-formatting with none-ls
+- [🪲 Debugging Guide](lua/docs/debugging.md) - nvim-dap, UI, virtual text, Telescope, Go (Delve)
+- [🤖 AI Features](lua/docs/ai-features.md) - Copilot, ChatGPT, Gen.nvim setup and usage
 
 ### Configuration Guides
 

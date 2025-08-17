@@ -4,13 +4,13 @@ This guide will help you set up intelligent AI features in your Neovim configura
 
 ## 📦 What's Included
 
-### 1. **Codeium** - Intelligent Code Suggestions
+### 1. **GitHub Copilot** - Intelligent Code Suggestions
 
 - **Trigger**: Automatic suggestions as you type (when enabled)
-- **Accept**: `Ctrl+G` (as requested)
+- **Accept**: `Ctrl+G` (as configured)
 - **Navigate**: `Ctrl+;` (next), `Ctrl+,` (previous)
 - **Clear**: `Ctrl+X`
-- **Toggle**: `<leader>ai` (enable), `<leader>dai` (disable)
+- **Enable/Disable/Toggle**: `<leader>ai` (enable), `<leader>dai` (disable), `<leader>tai` (toggle)
 
 ### 2. **ChatGPT** - AI Chat & Code Actions
 
@@ -32,12 +32,12 @@ This guide will help you set up intelligent AI features in your Neovim configura
 
 ### Step 1: Create Plugin Files
 
-Create these four new files in your `lua/plugins/` directory:
+Create these files in your `lua/plugins/` directory:
 
-1. **`lua/plugins/ai-codeium.lua`** - Copy the Codeium configuration
-2. **`lua/plugins/ai-chatgpt.lua`** - Copy the ChatGPT configuration
-3. **`lua/plugins/ai-gen.lua`** - Copy the Gen.nvim configuration
-4. **`lua/plugins/ai-trouble.lua`** - Copy the Trouble configuration
+1. **`lua/plugins/ai-copilot.lua`** - GitHub Copilot configuration
+2. **`lua/plugins/ai-chatgpt.lua`** - ChatGPT configuration
+3. **`lua/plugins/ai-gen.lua`** - Gen.nvim configuration
+4. **`lua/plugins/ai-trouble.lua`** - Trouble configuration
 
 ### Step 2: Update Plugin Initialization
 
@@ -58,11 +58,12 @@ return {
 	require("plugins.alpha"),
 	require("plugins.nvim-cmp"),
 	require("plugins.autopairs"),
-	-- AI PLUGINS (ADD THESE LINES)
-	require("plugins.ai-codeium"),    -- AI code suggestions
+	-- AI PLUGINS
+	-- require("plugins.ai-codeium"),    -- old (removed)
 	require("plugins.ai-chatgpt"),    -- ChatGPT integration
 	require("plugins.ai-gen"),        -- Gen.nvim for AI actions
 	require("plugins.ai-trouble"),    -- Trouble.nvim (dependency)
+	require("plugins.ai-copilot"),    -- GitHub Copilot code suggestions
 }
 ```
 
@@ -70,25 +71,25 @@ return {
 
 Replace your `lua/plugins/lualine.lua` with the updated version to show AI status in the status line.
 
-### Step 4: Set Up API Keys
+### Step 4: Set Up Authentication / API Keys
+
+#### For GitHub Copilot:
+
+1. Run `:Copilot setup` to authenticate with GitHub
+2. Check status with `:Copilot status`
 
 #### For ChatGPT:
 
-1. Get an OpenAI API key from [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+1. Get an OpenAI API key from https://platform.openai.com/api-keys
 2. Add to your shell profile (`.bashrc`, `.zshrc`, etc.):
 
 ```bash
 export OPENAI_API_KEY="your-api-key-here"
 ```
 
-#### For Codeium (Free):
-
-1. Codeium will prompt you to authenticate when first used
-2. No API key needed - it's free!
-
 #### For Gen.nvim (Local AI):
 
-1. Install Ollama: [https://ollama.ai/](https://ollama.ai/)
+1. Install Ollama: https://ollama.ai/
 2. Download a model: `ollama pull codellama:7b`
 3. The plugin will auto-start Ollama when needed
 
@@ -97,21 +98,22 @@ export OPENAI_API_KEY="your-api-key-here"
 ### Basic Workflow
 
 1. **Start Coding**: Open a file and start writing code
-2. **Enable AI**: Press `<leader>ai` to enable Codeium suggestions
+2. **Enable AI**: Press `<leader>ai` to enable Copilot suggestions
 3. **Get Suggestions**: As you type, you'll see AI suggestions
 4. **Accept**: Press `Ctrl+G` to accept suggestions
 5. **Chat**: Press `<leader>cc` to open AI chat for questions
 
 ### Key Bindings Summary
 
-| Key           | Action     | Description                  |
-| ------------- | ---------- | ---------------------------- |
-| `<leader>ai`  | Enable AI  | Turn on Codeium suggestions  |
-| `<leader>dai` | Disable AI | Turn off Codeium suggestions |
-| `Ctrl+G`      | Accept     | Accept AI code suggestion    |
-| `Ctrl+;`      | Next       | Next suggestion              |
-| `Ctrl+,`      | Previous   | Previous suggestion          |
-| `Ctrl+X`      | Clear      | Clear current suggestion     |
+| Key           | Action      | Description                   |
+| ------------- | ----------- | ----------------------------- |
+| `<leader>ai`  | Enable AI   | Turn on Copilot suggestions   |
+| `<leader>dai` | Disable AI  | Turn off Copilot suggestions  |
+| `<leader>tai` | Toggle AI   | Toggle Copilot on/off         |
+| `Ctrl+G`      | Accept      | Accept AI code suggestion     |
+| `Ctrl+;`      | Next        | Next suggestion               |
+| `Ctrl+,`      | Previous    | Previous suggestion           |
+| `Ctrl+X`      | Clear       | Clear current suggestion      |
 
 ### Chat & Code Actions
 
@@ -144,22 +146,23 @@ The AI suggestions are **disabled by default** to avoid interfering with your th
 
 Look at your status line - you'll see:
 
-- 🤖✅ when AI is enabled
-- 🤖❌ when AI is disabled
+- 🤖✅ when Copilot is enabled
+- 🤖❌ when Copilot is disabled
 
 ### Performance
 
-- **Codeium**: Fast, cloud-based, free
+- **GitHub Copilot**: Fast, cloud-based (requires GitHub account)
 - **ChatGPT**: Requires API key, pay-per-use
 - **Gen.nvim**: Local, private, requires Ollama
 
 ## 🔍 Troubleshooting
 
-### Codeium Not Working
+### GitHub Copilot Not Working
 
-1. Check internet connection
-2. Try `:CodeiumAuth` to re-authenticate
-3. Restart Neovim
+1. Run `:Copilot setup` to authenticate
+2. Check status with `:Copilot status`
+3. Ensure internet connectivity
+4. Restart Neovim
 
 ### ChatGPT Not Working
 
@@ -202,11 +205,11 @@ You can switch between different Ollama models by changing the model parameter i
 
 ## 📚 Resources
 
-- [Codeium Documentation](https://codeium.com/vim_tutorial)
+- [GitHub Copilot for Neovim (copilot.vim)](https://github.com/github/copilot.vim)
 - [ChatGPT.nvim GitHub](https://github.com/jackMort/ChatGPT.nvim)
 - [Gen.nvim GitHub](https://github.com/David-Kunz/gen.nvim)
 - [Ollama Models](https://ollama.ai/library)
 
 ---
 
-🎉 **You now have a powerful AI-assisted development environment!** Start with `<leader>ai` to enable suggestions and `<leader>cc` to chat with AI about your code.
+🎉 **You now have a powerful AI-assisted development environment!** Start with `<leader>ai` to enable Copilot suggestions and `<leader>cc` to chat with AI about your code.
