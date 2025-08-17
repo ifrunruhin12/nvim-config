@@ -30,7 +30,7 @@ A comprehensive, modern Neovim configuration built for speed, efficiency, and de
 2. **Clone this repository**:
 
    ```bash
-   git clone <your-repo> ~/.config/nvim
+   git clone https://github.com/ifrunruhin12/nvim-config.git ~/.config/nvim
    ```
 
 3. **Launch Neovim** and let plugins install automatically:
