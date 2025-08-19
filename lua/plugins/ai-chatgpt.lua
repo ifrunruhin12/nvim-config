@@ -227,7 +227,7 @@ return {
 		)
 		vim.keymap.set(
 			"n",
-			"<leader>ca",
+			"<leader>cga",
 			"<cmd>ChatGPTRun add_tests<CR>",
 			vim.tbl_extend("force", opts, { desc = "Add tests" })
 		)
