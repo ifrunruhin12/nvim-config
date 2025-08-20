@@ -11,6 +11,7 @@ return {
 	require("plugins.treesitter"),
 	require("plugins.lualine"),
 	require("plugins.lsp-config"),
+	require("plugins.gitsigns"),
 	require("plugins.none-ls"),
 	require("plugins.alpha"),
 	require("plugins.nvim-cmp"),
