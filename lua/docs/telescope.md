@@ -16,12 +16,15 @@ Telescope provides:
 
 ### Core Pickers
 
-| Key         | Command      | Description                           |
-| ----------- | ------------ | ------------------------------------- |
-| `<Space>ff` | `find_files` | Find files in current directory       |
-| `<Space>fg` | `live_grep`  | Search for text across all files      |
-| `<Space>fb` | `buffers`    | Find and switch to open buffers       |
-| `<Space>fh` | `help_tags`  | Search through Vim help documentation |
+| Key         | Command        | Description                                |
+| ----------- | -------------- | ------------------------------------------ |
+| `<Space>ff` | `find_files`   | Find files in current directory (+ hidden) |
+| `<Space>fg` | `live_grep`    | Search for text across all files           |
+| `<Space>fw` | `grep_string`  | Find word under cursor in all files        |
+| `<Space>fb` | `buffers`      | Find and switch to open buffers            |
+| `<Space>fh` | `help_tags`    | Search through Vim help documentation      |
+| `<Space>fr` | `oldfiles`     | Recently opened files                      |
+| `<Space>fc` | `commands`     | Search available commands                  |
 
 ### Navigation Within Telescope
 
