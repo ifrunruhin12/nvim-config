@@ -34,6 +34,21 @@
 - **`Ctrl + v`** - Open in vertical split
 - **`Esc`** - Close
 
+## Neo-tree File Explorer
+- **`<leader>e`** - Toggle neo-tree
+- **`<leader>o`** - Focus neo-tree
+- **`H`** (when in neo-tree) - Toggle hidden files visibility
+- **`?`** (when in neo-tree) - Show all keybindings
+
+### Inside Neo-tree
+- **`Enter`** - Open file
+- **`s`** - Open in vertical split
+- **`S`** - Open in horizontal split
+- **`a`** - Add file
+- **`A`** - Add directory
+- **`d`** - Delete
+- **`r`** - Rename
+
 ## Basic Vim
 - **`<leader>w`** - Save file
 - **`<leader>q`** - Quit
