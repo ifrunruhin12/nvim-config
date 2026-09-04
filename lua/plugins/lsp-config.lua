@@ -42,7 +42,6 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
-			local lspconfig = require("lspconfig")
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 			-- Set diagnostic config ONCE globally
@@ -113,7 +112,8 @@ return {
 
 				-- Wait a moment for cleanup
 				vim.defer_fn(function()
-					lspconfig[name].setup(config)
+					vim.lsp.config(name, config)
+					vim.lsp.enable(name)
 					servers_started[name] = true
 				end, 100)
 			end
